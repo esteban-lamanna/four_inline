@@ -14,11 +14,18 @@ namespace CuatroEnLinea
         {
             var blder = new StringBuilder();
 
+            blder.Append($"          ");
+
+            for (int x = 0; x <= MATRIX_COLUMN_LENGTH; x++)
+            {
+                blder.Append($"Col {x} ");
+            }
+
             for (int y = 0; y <= MATRIX_COLUMN_LENGTH; y++)
             {
                 blder.AppendLine();
 
-                blder.Append($"Line {y}    ");
+                blder.Append($"Line {y}  |  ");
 
                 for (int x = 0; x <= MATRIX_COLUMN_LENGTH; x++)
                 {
@@ -46,6 +53,27 @@ namespace CuatroEnLinea
             return blder.ToString();
         }
 
+        internal int GetRow(int xNumber)
+        {
+            for (int y = MATRIX_COLUMN_LENGTH; y >= 0; y--)
+            {
+                if (!ElementHasValue(xNumber, y))
+                    return y;
+            }
+
+            return MATRIX_COLUMN_LENGTH;
+        }
+
+        private bool ElementHasValue(int x, int y)
+        {
+            if (x > MATRIX_COLUMN_LENGTH || y > MATRIX_COLUMN_LENGTH || x < 0 || y < 0)
+                return false;
+
+            var item = Grid[x, y];
+
+            return item != null;
+        }
+
         public bool ValidatePositionAlreadyInUse(Mark currentMark)
         {
             var currentValue = Grid[currentMark.X, currentMark.Y];
@@ -70,9 +98,9 @@ namespace CuatroEnLinea
         private bool DetectarVerticales(Player player)
         {
             int found = 0;
-            for (int x = 0; x < MATRIX_COLUMN_LENGTH; x++)
+            for (int x = 0; x <= MATRIX_COLUMN_LENGTH; x++)
             {
-                for (int y = 0; y < MATRIX_COLUMN_LENGTH; y++)
+                for (int y = 0; y <= MATRIX_COLUMN_LENGTH; y++)
                 {
                     var item = Grid[x, y];
 
@@ -100,9 +128,9 @@ namespace CuatroEnLinea
 
         private bool DetectarDiagonales(Player player)
         {
-            for (int x = 0; x < MATRIX_COLUMN_LENGTH; x++)
+            for (int x = 0; x <= MATRIX_COLUMN_LENGTH; x++)
             {
-                for (int y = 0; y < MATRIX_COLUMN_LENGTH; y++)
+                for (int y = 0; y <= MATRIX_COLUMN_LENGTH; y++)
                 {
                     var inlineRigthDown = ElementHasValue(x, y, player) &&
                                  ElementHasValue(x + 1, y + 1, player) &&
@@ -142,9 +170,9 @@ namespace CuatroEnLinea
         private bool DetectarHorizontales(Player player)
         {
             int found = 0;
-            for (int y = 0; y < MATRIX_COLUMN_LENGTH; y++)
+            for (int y = 0; y <= MATRIX_COLUMN_LENGTH; y++)
             {
-                for (int x = 0; x < MATRIX_COLUMN_LENGTH; x++)
+                for (int x = 0; x <= MATRIX_COLUMN_LENGTH; x++)
                 {
                     var item = Grid[x, y];
 

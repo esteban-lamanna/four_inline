@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 
 namespace CuatroEnLinea
 {
@@ -10,31 +9,35 @@ namespace CuatroEnLinea
 
         static void Main(string[] args)
         {
-            Console.WriteLine("Probando cuatro en linea");
-            var input = "";
+            Console.WriteLine("Cuatro en linea");
+            var columnNumber = "";
             Mark currentMark = null;
 
             while (true)
             {
                 var currentPlayer = Players.GetNextPlayer(_movementNumber);
+                Console.Clear();
+                Console.WriteLine(_matrix.Draw());
 
-                Console.WriteLine($"Movimiento {_movementNumber} --- {currentPlayer}  Is your turn. Entry Format: n,n. 0<=n<=2");
+                Console.WriteLine($"Movimiento {_movementNumber} --- {currentPlayer} is your turn. Enter column number:");
 
                 var validInput = false;
                 while (!validInput)
                 {
-                    input = Console.ReadLine();
+                    columnNumber = Console.ReadLine();
 
-                    if (!ValidateInput(input))
-                        Console.WriteLine($"Wrong input!. {currentPlayer}  Is your turn. Entry Format: n,n. 0<=n<=2");
+                    if (!ValidateInput(columnNumber))
+                        Console.WriteLine($"Wrong input!. {currentPlayer} is your turn. Enter column number:");
                     else
                     {
-                        currentMark = new Mark(int.Parse(input.Split(",").First()),
-                                               int.Parse(input.Split(",").Last()),
+                        var row = _matrix.GetRow(int.Parse(columnNumber));
+
+                        currentMark = new Mark(int.Parse(columnNumber),
+                                               row,
                                                currentPlayer);
 
                         if (ValidatePositionAlreadyInUse(currentMark))
-                            Console.WriteLine($"Wrong input!. Already in use. {currentPlayer} Is your turn. Entry Format: n,n. 0<=n<=2");
+                            Console.WriteLine($"Wrong input!. Already in use. {currentPlayer} is your turn. Enter column number:");
                         else
                             validInput = true;
                     }
@@ -78,21 +81,13 @@ namespace CuatroEnLinea
 
         private static bool ValidateInput(string input)
         {
-            var splitted = input.Split(",");
-
-            if (splitted.Count() == 0)
+            if (string.IsNullOrEmpty(input))
                 return false;
 
-            if (!int.TryParse(splitted.First(), out int x))
+            if (!int.TryParse(input, out int x))
                 return false;
 
             if (x < 0 || x > Matrix.MATRIX_COLUMN_LENGTH)
-                return false;
-
-            if (!int.TryParse(splitted.Last(), out int y))
-                return false;
-
-            if (y < 0 || y > Matrix.MATRIX_COLUMN_LENGTH)
                 return false;
 
             return true;
