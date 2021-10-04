@@ -61,12 +61,10 @@ namespace CuatroEnLinea
 
         private static bool DetectWinner(Player player)
         {
-            if (_movementNumber < 5)
+            if (_movementNumber < 7)
                 return false;
 
-            var marks = _matrix.GetPlayerMarks(player);
-
-            return _matrix.ComparePlayerMarksWithPossibleWinningCombination(player, marks);
+            return _matrix.DetectWinner(player);
         }
 
         private static void PutMarkInMatrix(Mark mark)

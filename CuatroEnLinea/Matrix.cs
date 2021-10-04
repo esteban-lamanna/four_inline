@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Text;
+﻿using System.Text;
 
 namespace CuatroEnLinea
 {
@@ -81,7 +80,7 @@ namespace CuatroEnLinea
             return currentValue != null;
         }
 
-        public bool ComparePlayerMarksWithPossibleWinningCombination(Player currentPlayer, IList<Mark> marks)
+        public bool DetectWinner(Player currentPlayer)
         {
             if (DetectarHorizontales(currentPlayer))
                 return true;
@@ -141,11 +140,27 @@ namespace CuatroEnLinea
                         return true;
 
                     var inlineDownLeft = ElementHasValue(x, y, player) &&
-                                 ElementHasValue(x - 1, y - 1, player) &&
-                                 ElementHasValue(x - 2, y - 2, player) &&
-                                 ElementHasValue(x - 3, y - 3, player);
+                                 ElementHasValue(x - 1, y + 1, player) &&
+                                 ElementHasValue(x - 2, y + 2, player) &&
+                                 ElementHasValue(x - 3, y + 3, player);
 
                     if (inlineDownLeft)
+                        return true;
+
+                    var inlineUpLeft = ElementHasValue(x, y, player) &&
+                                ElementHasValue(x - 1, y - 1, player) &&
+                                ElementHasValue(x - 2, y - 2, player) &&
+                                ElementHasValue(x - 3, y - 3, player);
+
+                    if (inlineUpLeft)
+                        return true;
+
+                    var inlineUpRigth = ElementHasValue(x, y, player) &&
+                          ElementHasValue(x + 1, y - 1, player) &&
+                          ElementHasValue(x + 2, y - 2, player) &&
+                          ElementHasValue(x + 3, y - 3, player);
+
+                    if (inlineUpRigth)
                         return true;
                 }
             }
@@ -201,28 +216,6 @@ namespace CuatroEnLinea
         public void PutMarkInMatrix(Mark mark)
         {
             Grid[mark.X, mark.Y] = mark;
-        }
-
-        public IList<Mark> GetPlayerMarks(Player player)
-        {
-            var list = new List<Mark>();
-
-            for (int x = 0; x <= MATRIX_COLUMN_LENGTH; x++)
-            {
-                for (int y = 0; y <= MATRIX_COLUMN_LENGTH; y++)
-                {
-                    var currentItem = Grid[x, y];
-                    if (currentItem == null)
-                        continue;
-
-                    if (currentItem.Player != player)
-                        continue;
-
-                    list.Add(currentItem);
-                }
-            }
-
-            return list;
         }
     }
 }
